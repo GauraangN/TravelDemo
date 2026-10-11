@@ -1,0 +1,65 @@
+@page "{id:int}"
+@model TravelDemo.Pages.Destinations.DetailsModel
+@{
+    ViewData["Title"] = Model.Destination.Name;
+}
+
+<div class="position-relative bg-dark text-white py-5" style="background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('@Model.Destination.ImageUrl') center/cover no-repeat;">
+    <div class="container py-5 text-center">
+        <span class="badge bg-info text-dark font-mono uppercase font-bold px-3 py-1 mb-2">@Model.Destination.Country • @Model.Destination.Region</span>
+        <h1 class="display-4 fw-bold text-white mb-3">@Model.Destination.Name</h1>
+        <p class="lead text-slate-200 max-w-2xl mx-auto">@Model.Destination.Description</p>
+    </div>
+</div>
+
+<div class="container my-5">
+    <h3 class="fw-bold mb-4">
+        Available Packages in @Model.Destination.Name (@Model.Destination.Packages.Count)
+    </h3>
+
+    @if (!Model.Destination.Packages.Any())
+    {
+        <div class="alert alert-info">No travel packages currently listed for this destination.</div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var pkg in Model.Destination.Packages)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="package-card">
+                        <div class="package-img-wrapper">
+                            <img src="@pkg.ImageUrl" alt="@pkg.Title" class="package-img" loading="lazy" />
+                            <span class="package-badge-category">@pkg.Category</span>
+                            <span class="package-badge-price">$@pkg.PricePerPerson.ToString("N0")</span>
+                        </div>
+                        <div class="package-content">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="text-warning small fw-bold">
+                                    <i class="fa-solid fa-star me-1"></i>@pkg.Rating.ToString("0.0")
+                                </span>
+                            </div>
+                            <h3 class="package-title">
+                                <a asp-page="/Packages/Details" asp-route-id="@pkg.Id" class="text-decoration-none text-dark">
+                                    @pkg.Title
+                                </a>
+                            </h3>
+                            <p class="package-summary">@pkg.Summary</p>
+
+                            <div class="package-meta">
+                                <div><i class="fa-regular fa-clock me-1"></i> @pkg.DurationDays Days</div>
+                                <div><i class="fa-solid fa-users me-1"></i> Max @pkg.MaxGroupSize</div>
+                            </div>
+
+                            <div class="mt-3 pt-3 border-top">
+                                <a asp-page="/Packages/Details" asp-route-id="@pkg.Id" class="btn btn-wl-primary w-100 justify-content-center">
+                                    View Details <i class="fa-solid fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

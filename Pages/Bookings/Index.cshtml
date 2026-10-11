@@ -1,0 +1,118 @@
+@page
+@model TravelDemo.Pages.Bookings.IndexModel
+@{
+    ViewData["Title"] = "My Travel Bookings";
+}
+
+<div class="bg-dark text-white py-4 mb-4">
+    <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div>
+            <h2 class="fw-bold mb-0">My Expeditions Dashboard</h2>
+            <p class="text-slate-400 mb-0 small">Manage your upcoming trips, itineraries, and booking tickets</p>
+        </div>
+        <a asp-page="/Packages/Index" class="btn btn-wl-primary">
+            <i class="fa-solid fa-plus me-1"></i> Book New Expedition
+        </a>
+    </div>
+</div>
+
+<div class="container mb-5">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4 shadow-sm" role="alert">
+            <i class="fa-solid fa-circle-check me-2"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!Model.Bookings.Any())
+    {
+        <div class="card border-0 shadow-sm rounded-4 text-center p-5">
+            <div class="mb-3 text-secondary">
+                <i class="fa-solid fa-suitcase-rolling fa-4x text-slate-300"></i>
+            </div>
+            <h3 class="fw-bold text-dark">No Expeditions Booked Yet</h3>
+            <p class="text-secondary max-w-md mx-auto">
+                You haven't reserved any travel packages yet. Explore our handcrafted destinations and book your next trip!
+            </p>
+            <div class="mt-2">
+                <a asp-page="/Packages/Index" class="btn btn-wl-primary px-4 py-2">
+                    Browse Travel Packages <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var b in Model.Bookings)
+            {
+                var pkg = b.Departure?.TravelPackage;
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
+                        <div class="row g-0 h-100">
+                            <div class="col-sm-5 position-relative">
+                                <img src="@pkg?.ImageUrl" alt="@pkg?.Title" class="w-100 h-100 object-fit-cover min-h-200" />
+                                <span class="position-absolute top-0 start-0 m-2">
+                                    @switch (b.Status)
+                                    {
+                                        case TravelDemo.Models.BookingStatus.Confirmed:
+                                            <span class="status-badge confirmed"><i class="fa-solid fa-check me-1"></i> Confirmed</span>
+                                            break;
+                                        case TravelDemo.Models.BookingStatus.Pending:
+                                            <span class="status-badge pending"><i class="fa-solid fa-hourglass-start me-1"></i> Pending</span>
+                                            break;
+                                        case TravelDemo.Models.BookingStatus.Cancelled:
+                                            <span class="status-badge cancelled"><i class="fa-solid fa-ban me-1"></i> Cancelled</span>
+                                            break;
+                                    }
+                                </span>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="card-body p-4 d-flex flex-column h-100">
+                                    <div class="text-uppercase text-primary small fw-bold mb-1">
+                                        Ref: #WND-@b.Id.ToString("D6")
+                                    </div>
+                                    <h5 class="fw-bold text-dark mb-1">@pkg?.Title</h5>
+                                    <div class="text-secondary small mb-3">
+                                        <i class="fa-solid fa-location-dot text-danger me-1"></i> @pkg?.Destination?.Name
+                                    </div>
+
+                                    <div class="bg-light rounded-3 p-2 px-3 small mb-3 border">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span class="text-muted">Departure:</span>
+                                            <span class="fw-bold">@b.Departure?.StartDate.ToString("dd MMM yyyy")</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span class="text-muted">Travellers:</span>
+                                            <span class="fw-bold">@b.Travellers Person(s)</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <span class="text-muted">Total Paid:</span>
+                                            <span class="fw-bold text-success">$@b.TotalPrice.ToString("N2")</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-auto d-flex gap-2">
+                                        <a asp-page="/Bookings/Confirmation" asp-route-id="@b.Id" class="btn btn-sm btn-wl-outline flex-grow-1">
+                                            <i class="fa-solid fa-ticket me-1"></i> Ticket Details
+                                        </a>
+
+                                        @if (b.Status != TravelDemo.Models.BookingStatus.Cancelled)
+                                        {
+                                            <form method="post" asp-page-handler="Cancel" asp-route-bookingId="@b.Id" onsubmit="return confirm('Are you sure you want to cancel this booking? Reserved seats will be freed up.');">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    Cancel
+                                                </button>
+                                            </form>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

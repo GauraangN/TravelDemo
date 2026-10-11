@@ -1,0 +1,20 @@
+## Build and Output Folders
+bin/
+obj/
+publish/
+
+## User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vscode/
+.idea/
+
+## SQLite local db (optional: keep or ignore depending on whether seeded on startup)
+# travel.db
+
+## OS generated files
+.DS_Store
+Thumbs.db

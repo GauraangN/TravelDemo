@@ -1,0 +1,154 @@
+@page
+@model TravelDemo.Pages.Admin.PackagesModel
+@{
+    ViewData["Title"] = "Manage Travel Packages";
+}
+
+<div class="bg-dark text-white py-4 mb-4">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <h2 class="fw-bold mb-0">Manage Travel Packages</h2>
+            <p class="text-slate-400 mb-0 small">Add, edit, or remove expedition packages and initial departures</p>
+        </div>
+        <a asp-page="/Admin/Index" class="btn btn-wl-outline text-white">
+            <i class="fa-solid fa-arrow-left me-1"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<div class="container mb-5">
+    @if (TempData["AdminSuccess"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4 shadow-sm" role="alert">
+            <i class="fa-solid fa-circle-check me-2"></i> @TempData["AdminSuccess"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row g-4">
+        <!-- New Package Form -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h4 class="fw-bold mb-3">Add New Travel Package</h4>
+                <form method="post" asp-page-handler="Create">
+                    <div class="mb-3">
+                        <label asp-for="NewPackage.Title" class="form-label fw-bold">Package Title</label>
+                        <input asp-for="NewPackage.Title" class="form-control" placeholder="e.g. Hawaiian Volcanoes Trek" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="NewPackage.DestinationId" class="form-label fw-bold">Destination</label>
+                        <select asp-for="NewPackage.DestinationId" class="form-select" required>
+                            <option value="">Select Destination</option>
+                            @foreach (var d in Model.Destinations)
+                            {
+                                <option value="@d.Id">@d.Name (@d.Country)</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="NewPackage.Category" class="form-label fw-bold">Category</label>
+                        <select asp-for="NewPackage.Category" class="form-select">
+                            @foreach (var cat in Enum.GetNames(typeof(TravelDemo.Models.PackageCategory)))
+                            {
+                                <option value="@cat">@cat</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label asp-for="NewPackage.DurationDays" class="form-label fw-bold">Duration (Days)</label>
+                            <input asp-for="NewPackage.DurationDays" type="number" class="form-control" value="7" min="1" required />
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="NewPackage.PricePerPerson" class="form-label fw-bold">Price ($)</label>
+                            <input asp-for="NewPackage.PricePerPerson" type="number" class="form-control" value="1500" min="50" step="50" required />
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label asp-for="NewPackage.MaxGroupSize" class="form-label fw-bold">Max Group Size</label>
+                            <input asp-for="NewPackage.MaxGroupSize" type="number" class="form-control" value="12" min="2" required />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-bold">1st Departure Date</label>
+                            <input type="date" asp-for="InitialDepartureDate" class="form-control" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="NewPackage.Summary" class="form-label fw-bold">Summary Description</label>
+                        <textarea asp-for="NewPackage.Summary" class="form-control" rows="3" placeholder="Short description of the trip..."></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="NewPackage.Inclusions" class="form-label fw-bold">Inclusions (Comma separated)</label>
+                        <input asp-for="NewPackage.Inclusions" class="form-control" placeholder="e.g. 4-Star Hotel, Breakfast, Guided Tour, Airport Transfer" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="NewPackage.ImageUrl" class="form-label fw-bold">Image URL</label>
+                        <input asp-for="NewPackage.ImageUrl" class="form-control" placeholder="https://images.unsplash.com/..." />
+                    </div>
+
+                    <button type="submit" class="btn btn-wl-primary w-100 py-2 justify-content-center">
+                        <i class="fa-solid fa-plus me-1"></i> Save Travel Package
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Package List Table -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h4 class="fw-bold mb-3">Current Packages (@Model.Packages.Count)</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Package</th>
+                                <th>Destination</th>
+                                <th>Price</th>
+                                <th>Departures</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var pkg in Model.Packages)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <img src="@pkg.ImageUrl" alt="@pkg.Title" class="rounded object-fit-cover" style="width: 45px; height: 45px;" />
+                                            <div>
+                                                <div class="fw-bold text-dark">@pkg.Title</div>
+                                                <span class="badge bg-light text-secondary border">@pkg.Category</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@pkg.Destination?.Name</td>
+                                    <td class="fw-bold text-primary">$@pkg.PricePerPerson.ToString("N0")</td>
+                                    <td>
+                                        <span class="badge bg-info bg-opacity-10 text-info fw-bold">
+                                            @pkg.Departures.Count Departure(s)
+                                        </span>
+                                    </td>
+                                    <td class="text-end">
+                                        <form method="post" asp-page-handler="Delete" asp-route-packageId="@pkg.Id" onsubmit="return confirm('Delete this package?');">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

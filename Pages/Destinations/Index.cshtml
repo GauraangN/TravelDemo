@@ -1,0 +1,54 @@
+@page
+@model TravelDemo.Pages.Destinations.IndexModel
+@{
+    ViewData["Title"] = "World Destinations";
+}
+
+<div class="bg-dark text-white py-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+    <div class="container text-center position-relative z-1 py-3">
+        <h1 class="fw-bold fs-1">Explore Global Destinations</h1>
+        <p class="text-slate-400 max-w-2xl mx-auto">
+            From tropical Southeast Asian beaches to snow-draped European mountain summits and African savannahs.
+        </p>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <!-- Region Selector Pills -->
+    <div class="d-flex justify-content-center gap-2 flex-wrap mb-5">
+        <a asp-page="/Destinations/Index" class="category-pill @(string.IsNullOrEmpty(Model.Region) ? "active" : "")">
+            All Regions
+        </a>
+        <a asp-page="/Destinations/Index" asp-route-region="Asia" class="category-pill @(Model.Region == "Asia" ? "active" : "")">
+            Asia
+        </a>
+        <a asp-page="/Destinations/Index" asp-route-region="Europe" class="category-pill @(Model.Region == "Europe" ? "active" : "")">
+            Europe
+        </a>
+        <a asp-page="/Destinations/Index" asp-route-region="Africa" class="category-pill @(Model.Region == "Africa" ? "active" : "")">
+            Africa
+        </a>
+        <a asp-page="/Destinations/Index" asp-route-region="Americas" class="category-pill @(Model.Region == "Americas" ? "active" : "")">
+            Americas
+        </a>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var dest in Model.Destinations)
+        {
+            <div class="col-lg-4 col-md-6">
+                <a asp-page="/Destinations/Details" asp-route-id="@dest.Id" class="dest-card">
+                    <img src="@dest.ImageUrl" alt="@dest.Name" class="dest-img" loading="lazy" />
+                    <div class="dest-overlay">
+                        <span class="dest-region">@dest.Country • @dest.Region</span>
+                        <h3 class="dest-name">@dest.Name</h3>
+                        <p class="small text-slate-300 mb-2 line-clamp-2">@dest.Description</p>
+                        <span class="small text-info fw-bold">
+                            <i class="fa-solid fa-suitcase me-1"></i> @dest.Packages.Count Travel Packages
+                        </span>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,122 @@
+@page
+@model TravelDemo.Pages.Bookings.CreateModel
+@{
+    ViewData["Title"] = "Checkout & Confirm Reservation";
+}
+
+<div class="bg-dark text-white py-4 mb-4">
+    <div class="container text-center">
+        <h2 class="fw-bold">Expedition Reservation Checkout</h2>
+        <p class="text-slate-400 mb-0">Review trip details and confirm lead traveller information</p>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row g-4 justify-content-center">
+        <!-- Trip Summary Sidebar -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-md rounded-4 overflow-hidden">
+                <img src="@Model.Package.ImageUrl" alt="@Model.Package.Title" class="object-fit-cover" style="height: 200px;" />
+                <div class="card-body p-4">
+                    <span class="badge bg-primary mb-2">@Model.Package.Category</span>
+                    <h4 class="fw-bold text-dark">@Model.Package.Title</h4>
+                    <div class="text-secondary small mb-3">
+                        <i class="fa-solid fa-location-dot text-danger me-1"></i> @Model.Package.Destination?.Name (@Model.Package.Destination?.Country)
+                    </div>
+
+                    <div class="bg-light p-3 rounded-3 mb-3 border">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted small">Departure Date:</span>
+                            <span class="fw-bold text-dark">@Model.Departure.StartDate.ToString("dd MMMM yyyy")</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted small">Duration:</span>
+                            <span class="fw-bold text-dark">@Model.Package.DurationDays Days</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted small">Available Seats:</span>
+                            <span class="badge bg-success bg-opacity-10 text-success fw-bold">@Model.Departure.SeatsLeft seats remaining</span>
+                        </div>
+                    </div>
+
+                    <div class="border-top pt-3">
+                        <div class="d-flex justify-content-between text-secondary mb-1">
+                            <span>Price per Person</span>
+                            <span>$@Model.Package.PricePerPerson.ToString("N0")</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-secondary mb-2">
+                            <span>Travellers</span>
+                            <span id="travellerCountText">@Model.Booking.Travellers</span>
+                        </div>
+                        <div class="d-flex justify-content-between fs-5 fw-bold text-dark border-top pt-2 mt-2">
+                            <span>Total Due</span>
+                            <span class="text-primary" id="calcTotal">$@((Model.Package.PricePerPerson * Model.Booking.Travellers).ToString("N0"))</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Passenger Details Form -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-md rounded-4 p-4">
+                <h4 class="fw-bold mb-3">
+                    <i class="fa-solid fa-user-check text-primary me-2"></i>Passenger Information
+                </h4>
+                <p class="text-secondary small">Please enter contact details for the primary lead passenger.</p>
+                <hr />
+
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 mb-3"></div>
+
+                    <input type="hidden" asp-for="Booking.DepartureId" />
+
+                    <div class="mb-3">
+                        <label asp-for="Booking.LeadName" class="form-label fw-bold">Lead Traveller Full Name</label>
+                        <input asp-for="Booking.LeadName" class="form-control form-control-lg fs-6" placeholder="e.g. Alex Traveler" required />
+                        <span asp-validation-for="Booking.LeadName" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Booking.Phone" class="form-label fw-bold">Phone Number</label>
+                            <input asp-for="Booking.Phone" class="form-control" placeholder="+1 (555) 000-0000" required />
+                            <span asp-validation-for="Booking.Phone" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Booking.Travellers" class="form-label fw-bold">Number of Travellers</label>
+                            <input asp-for="Booking.Travellers" type="number" id="inputTravellers" class="form-control" min="1" max="@Model.Departure.SeatsLeft" onchange="recalcTotal()" required />
+                            <span asp-validation-for="Booking.Travellers" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info d-flex align-items-center gap-3 rounded-3 my-4">
+                        <i class="fa-solid fa-credit-card fa-2x text-info"></i>
+                        <div class="small">
+                            <strong>Demo Mode Active:</strong> No credit card charge will be made. Clicking "Confirm & Pay" will immediately reserve your seats and issue your travel itinerary ticket.
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <a asp-page="/Packages/Details" asp-route-id="@Model.Package.Id" class="btn btn-wl-outline px-4">Back</a>
+                        <button type="submit" class="btn btn-wl-accent flex-grow-1 py-3 justify-content-center fs-6">
+                            <i class="fa-solid fa-circle-check me-2"></i> Confirm & Book Now
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const unitPrice = @Model.Package.PricePerPerson;
+        function recalcTotal() {
+            const count = parseInt(document.getElementById('inputTravellers').value) || 1;
+            document.getElementById('travellerCountText').innerText = count;
+            const total = count * unitPrice;
+            document.getElementById('calcTotal').innerText = '$' + total.toLocaleString('en-US');
+        }
+    </script>
+}

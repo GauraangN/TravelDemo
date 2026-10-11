@@ -1,0 +1,154 @@
+@page
+@model TravelDemo.Pages.Admin.IndexModel
+@{
+    ViewData["Title"] = "Admin Management Portal";
+}
+
+<div class="bg-dark text-white py-4 mb-4">
+    <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div>
+            <h2 class="fw-bold mb-0">
+                <i class="fa-solid fa-shield-halved text-warning me-2"></i>Admin Control Center
+            </h2>
+            <p class="text-slate-400 mb-0 small">Overview of system bookings, revenue metrics, and trip management</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-page="/Admin/Packages" class="btn btn-wl-primary">
+                <i class="fa-solid fa-plus me-1"></i> Manage Packages
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    @if (TempData["AdminSuccess"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4 shadow-sm" role="alert">
+            <i class="fa-solid fa-circle-check me-2"></i> @TempData["AdminSuccess"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Admin KPI Stat Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-3 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-uppercase text-muted small fw-bold">Total Confirmed</div>
+                        <div class="fs-2 fw-bold text-dark">@Model.TotalBookings</div>
+                    </div>
+                    <div class="icon-box mb-0 bg-primary bg-opacity-10 text-primary">
+                        <i class="fa-solid fa-ticket fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-uppercase text-muted small fw-bold">Total Revenue</div>
+                        <div class="fs-2 fw-bold text-success">$@Model.TotalRevenue.ToString("N0")</div>
+                    </div>
+                    <div class="icon-box mb-0 bg-success bg-opacity-10 text-success">
+                        <i class="fa-solid fa-sack-dollar fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-uppercase text-muted small fw-bold">Destinations</div>
+                        <div class="fs-2 fw-bold text-dark">@Model.TotalDestinations</div>
+                    </div>
+                    <div class="icon-box mb-0 bg-info bg-opacity-10 text-info">
+                        <i class="fa-solid fa-earth-americas fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-uppercase text-muted small fw-bold">Packages</div>
+                        <div class="fs-2 fw-bold text-dark">@Model.TotalPackages</div>
+                    </div>
+                    <div class="icon-box mb-0 bg-warning bg-opacity-10 text-warning">
+                        <i class="fa-solid fa-suitcase-rolling fs-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bookings Table -->
+    <div class="card border-0 shadow-sm rounded-4 p-4">
+        <h4 class="fw-bold mb-3">All Customer Reservations</h4>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Ref #</th>
+                        <th>Lead Traveler</th>
+                        <th>Trip Package</th>
+                        <th>Departure Date</th>
+                        <th>Pax</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var b in Model.AllBookings)
+                    {
+                        <tr>
+                            <td class="fw-bold font-mono text-primary">#WND-@b.Id.ToString("D6")</td>
+                            <td>
+                                <div class="fw-bold text-dark">@b.LeadName</div>
+                                <div class="small text-muted">@b.Phone</div>
+                            </td>
+                            <td>
+                                <div class="fw-medium">@b.Departure?.TravelPackage?.Title</div>
+                                <div class="small text-muted">@b.Departure?.TravelPackage?.Destination?.Name</div>
+                            </td>
+                            <td>@b.Departure?.StartDate.ToString("dd MMM yyyy")</td>
+                            <td class="fw-bold">@b.Travellers</td>
+                            <td class="fw-bold text-success">$@b.TotalPrice.ToString("N0")</td>
+                            <td>
+                                @switch (b.Status)
+                                {
+                                    case TravelDemo.Models.BookingStatus.Confirmed:
+                                        <span class="status-badge confirmed">Confirmed</span>
+                                        break;
+                                    case TravelDemo.Models.BookingStatus.Pending:
+                                        <span class="status-badge pending">Pending</span>
+                                        break;
+                                    case TravelDemo.Models.BookingStatus.Cancelled:
+                                        <span class="status-badge cancelled">Cancelled</span>
+                                        break;
+                                }
+                            </td>
+                            <td class="text-end">
+                                <form method="post" asp-page-handler="UpdateStatus" class="d-inline-flex gap-1">
+                                    <input type="hidden" name="bookingId" value="@b.Id" />
+                                    <select name="newStatus" class="form-select form-select-sm" onchange="this.form.submit()">
+                                        <option value="Confirmed" selected="@(b.Status == TravelDemo.Models.BookingStatus.Confirmed)">Confirmed</option>
+                                        <option value="Pending" selected="@(b.Status == TravelDemo.Models.BookingStatus.Pending)">Pending</option>
+                                        <option value="Cancelled" selected="@(b.Status == TravelDemo.Models.BookingStatus.Cancelled)">Cancelled</option>
+                                    </select>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
