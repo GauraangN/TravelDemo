@@ -8,10 +8,10 @@
 <div class="position-relative bg-dark text-white py-5" style="background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.9)), url('@Model.Package.ImageUrl') center/cover no-repeat;">
     <div class="container py-4">
         <div class="d-flex align-items-center gap-2 mb-2">
-            <span class="badge bg-info text-dark font-mono uppercase font-bold px-3 py-1">@Model.Package.Category</span>
+            <span class="badge bg-warning text-dark font-mono uppercase font-bold px-3 py-1">@Model.Package.Category</span>
             <span class="text-warning fw-bold"><i class="fa-solid fa-star me-1"></i>@Model.Package.Rating.ToString("0.0") Rating</span>
             <span class="text-slate-300">•</span>
-            <span class="text-slate-300"><i class="fa-solid fa-location-dot text-info me-1"></i>@Model.Package.Destination?.Name (@Model.Package.Destination?.Country)</span>
+            <span class="text-slate-300"><i class="fa-solid fa-location-dot text-warning me-1"></i>@Model.Package.Destination?.Name (@Model.Package.Destination?.Country)</span>
         </div>
         <h1 class="display-5 fw-bold text-white mb-3">@Model.Package.Title</h1>
         <p class="lead text-slate-200 max-w-3xl mb-4">@Model.Package.Summary</p>
@@ -19,7 +19,7 @@
         <div class="d-flex flex-wrap gap-4 align-items-center">
             <div class="bg-white bg-opacity-10 backdrop-blur rounded-3 p-3 px-4 text-center border border-white border-opacity-20">
                 <div class="small text-slate-300">Price per Person</div>
-                <div class="fs-2 fw-bold text-info">$@Model.Package.PricePerPerson.ToString("N0")</div>
+                <div class="fs-2 fw-bold text-warning">$@Model.Package.PricePerPerson.ToString("N0")</div>
             </div>
             <div class="bg-white bg-opacity-10 backdrop-blur rounded-3 p-3 px-4 text-center border border-white border-opacity-20">
                 <div class="small text-slate-300">Duration</div>

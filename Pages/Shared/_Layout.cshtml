@@ -21,16 +21,16 @@
     <div class="demo-user-banner">
         <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
-                <i class="fa-solid fa-sparkles text-info me-1"></i>
+                <i class="fa-solid fa-sparkles text-warning me-1"></i>
                 <strong>ASP.NET Core 10 Demo:</strong> Wanderlust Luxury & Adventure Travel Platform
             </div>
             <div class="d-flex align-items-center gap-3">
-                <span class="d-none d-md-inline text-slate-400">Quick Test Credentials:</span>
+                <span class="d-none d-md-inline text-warning text-opacity-75">Quick Test Credentials:</span>
                 <span class="wl-badge-demo" title="Customer Login">
-                    <i class="fa-solid fa-user me-1"></i> alex@traveler.com / Traveler123!
+                    <i class="fa-solid fa-user me-1 text-warning"></i> alex@traveler.com / Traveler123!
                 </span>
-                <span class="wl-badge-demo" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border-color: rgba(245, 158, 11, 0.3);" title="Admin Login">
-                    <i class="fa-solid fa-user-shield me-1"></i> admin@wanderlust.com / Admin123!
+                <span class="wl-badge-demo" style="background: rgba(245, 158, 11, 0.2); color: #fed7aa; border-color: rgba(245, 158, 11, 0.4);" title="Admin Login">
+                    <i class="fa-solid fa-user-shield me-1 text-warning"></i> admin@wanderlust.com / Admin123!
                 </span>
             </div>
         </div>
@@ -41,7 +41,7 @@
         <nav class="navbar navbar-expand-lg wl-navbar navbar-dark">
             <div class="container">
                 <a class="wl-brand" asp-area="" asp-page="/Index">
-                    <i class="fa-solid fa-compass text-info me-1"></i> Wanderlust
+                    <i class="fa-solid fa-compass text-warning me-1"></i> Wanderlust
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#wlNavbarContent" aria-controls="wlNavbarContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -87,29 +87,29 @@
                         {
                             <div class="dropdown">
                                 <button class="btn btn-sm btn-outline-light dropdown-toggle rounded-pill px-3" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-regular fa-user-circle me-1 text-info"></i> @User.Identity?.Name
+                                    <i class="fa-regular fa-user-circle me-1 text-warning"></i> @User.Identity?.Name
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userMenu">
                                     <li>
                                         <a class="dropdown-menu-item dropdown-item" asp-page="/Bookings/Index">
-                                            <i class="fa-solid fa-receipt me-2 text-primary"></i> My Trips
+                                            <i class="fa-solid fa-receipt me-2 text-warning"></i> My Trips
                                         </a>
                                     </li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
                                         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
                                             <button type="submit" class="dropdown-item text-danger">
-                                                <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
-                                            </button>
-                                        </form>
-                                    </li>
-                                </ul>
+                                                 <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
+                                             </button>
+                                         </form>
+                                     </li>
+                                 </ul>
                             </div>
                         }
                         else
                         {
                             <a class="btn btn-sm btn-outline-light rounded-pill px-3" asp-area="Identity" asp-page="/Account/Login">
-                                <i class="fa-solid fa-right-to-bracket me-1"></i> Sign In
+                                <i class="fa-solid fa-right-to-bracket me-1 text-warning"></i> Sign In
                             </a>
                             <a class="btn btn-sm btn-wl-primary rounded-pill px-3" asp-area="Identity" asp-page="/Account/Register">
                                 <i class="fa-solid fa-user-plus me-1"></i> Register
@@ -127,12 +127,12 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white pt-5 pb-4 mt-5 border-top border-secondary">
+    <footer class="bg-dark text-white pt-5 pb-4 mt-5 border-top border-warning border-opacity-25">
         <div class="container">
             <div class="row g-4">
                 <div class="col-lg-4 col-md-6">
                     <div class="wl-brand mb-3">
-                        <i class="fa-solid fa-compass text-info"></i> Wanderlust Expeditions
+                        <i class="fa-solid fa-compass text-warning"></i> Wanderlust Expeditions
                     </div>
                     <p class="text-secondary small">
                         Crafting extraordinary luxury and adventure journeys across 6 continents. Explore the world with authentic experiences, expert local guides, and small group privacy.
@@ -156,10 +156,10 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="h6 text-uppercase fw-bold text-light mb-3">Why Choose Us</div>
                     <ul class="list-unstyled text-secondary small d-flex flex-column gap-2">
-                        <li><i class="fa-solid fa-check text-info me-2"></i> Small Group Experience (Max 12)</li>
-                        <li><i class="fa-solid fa-check text-info me-2"></i> Concurrency-Safe Seat Reservations</li>
-                        <li><i class="fa-solid fa-check text-info me-2"></i> Handpicked 4 & 5-Star Stays</li>
-                        <li><i class="fa-solid fa-check text-info me-2"></i> 24/7 Dedicated Concierge</li>
+                        <li><i class="fa-solid fa-check text-warning me-2"></i> Small Group Experience (Max 12)</li>
+                        <li><i class="fa-solid fa-check text-warning me-2"></i> Concurrency-Safe Seat Reservations</li>
+                        <li><i class="fa-solid fa-check text-warning me-2"></i> Handpicked 4 & 5-Star Stays</li>
+                        <li><i class="fa-solid fa-check text-warning me-2"></i> 24/7 Dedicated Concierge</li>
                     </ul>
                 </div>
                 <div class="col-lg-3 col-md-6">
