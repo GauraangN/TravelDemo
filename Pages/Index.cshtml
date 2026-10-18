@@ -1,114 +1,307 @@
 @page
 @model IndexModel
 @{
-    ViewData["Title"] = "Discover Extraordinary Journeys";
+    ViewData["Title"] = "Discover Extraordinary Journeys - Wanderlust Expeditions";
 }
 
-<!-- Hero Section -->
+<!-- Hero Section with Deep Oceanic Canvas & Ambient Warm Glow -->
 <div class="hero-wrapper">
-    <div class="container text-center">
-        <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 rounded-pill px-3 py-2 mb-3">
-            <i class="fa-solid fa-compass me-1"></i> ASP.NET Core 10 Travel Platform
-        </span>
+    <div class="container text-center position-relative z-1">
+        <div class="hero-tagline">
+            <i class="fa-solid fa-sparkles"></i> Handcrafted Luxury & Adventure Travel
+        </div>
         <h1 class="hero-title">
-            Explore the World’s Most <span>Breathtaking</span> Destinations
+            Explore Extraordinary <span class="highlight-text">Worldwide Journeys</span>
         </h1>
-        <p class="hero-subtitle mx-auto">
-            Small group luxury expeditions, curated itineraries, guaranteed departure seats, and unforgettable memory-making adventures.
+        <p class="hero-subtitle">
+            Curated small-group itineraries, guaranteed departures, handpicked 4 & 5-star accommodations, and authentic local experiences across 6 continents.
         </p>
 
-        <div class="hero-stats d-flex justify-content-center gap-4 flex-wrap mt-4">
-            <div><i class="fa-solid fa-map-location-dot text-warning me-2"></i><strong>50+</strong> Destinations</div>
-            <div><i class="fa-solid fa-users text-warning me-2"></i><strong>10,000+</strong> Happy Travelers</div>
-            <div><i class="fa-solid fa-star text-warning me-2"></i><strong>4.9/5</strong> Traveler Rating</div>
+        <div class="hero-stats-strip">
+            <div class="hero-stat-pill">
+                <i class="fa-solid fa-earth-americas text-warning"></i>
+                <span><strong>50+</strong> Destinations</span>
+            </div>
+            <div class="hero-stat-pill">
+                <i class="fa-solid fa-shield-check text-success"></i>
+                <span><strong>Guaranteed</strong> Departure Seats</span>
+            </div>
+            <div class="hero-stat-pill">
+                <i class="fa-solid fa-users text-info"></i>
+                <span><strong>Max 12</strong> Per Group</span>
+            </div>
+            <div class="hero-stat-pill">
+                <i class="fa-solid fa-star text-warning"></i>
+                <span><strong>4.9/5</strong> (10,000+ Travelers)</span>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Floating Interactive Search Widget -->
-<div class="container">
-    <div class="search-card">
-        <form method="get" class="row g-3 align-items-center">
-            <div class="col-lg-4 col-md-6">
-                <label class="form-label small fw-bold text-uppercase text-secondary mb-1">
-                    <i class="fa-solid fa-magnifying-glass me-1 text-primary"></i> Search Keyword
-                </label>
-                <input type="text" asp-for="Search" class="form-control search-input" placeholder="e.g. Bali, Swiss Alps, Kyoto..." />
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <label class="form-label small fw-bold text-uppercase text-secondary mb-1">
-                    <i class="fa-solid fa-tags me-1 text-primary"></i> Category
-                </label>
-                <select asp-for="Category" class="form-select search-input">
-                    <option value="">All Experience Types</option>
-                    @foreach (var cat in Enum.GetNames(typeof(TravelDemo.Models.PackageCategory)))
-                    {
-                        <option value="@cat">@cat</option>
-                    }
-                </select>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <label class="form-label small fw-bold text-uppercase text-secondary mb-1">
-                    <i class="fa-solid fa-dollar-sign me-1 text-primary"></i> Max Budget ($)
-                </label>
-                <input type="number" asp-for="MaxPrice" class="form-control search-input" placeholder="e.g. 2500" step="100" />
-            </div>
-
-            <div class="col-lg-2 col-md-6 d-flex align-items-end">
-                <button type="submit" class="btn btn-wl-primary w-100 py-2 justify-content-center">
-                    <i class="fa-solid fa-paper-plane me-1"></i> Search
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Category Pills Filter -->
-<div class="container mt-5">
-    <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap">
-        <a asp-page="/Index" class="category-pill @(string.IsNullOrEmpty(Model.Category) ? "active" : "")">
-            <i class="fa-solid fa-globe"></i> All Trips
-        </a>
-        @foreach (var cat in Enum.GetNames(typeof(TravelDemo.Models.PackageCategory)))
-        {
-            <a asp-page="/Index" asp-route-category="@cat" class="category-pill @(Model.Category == cat ? "active" : "")">
-                @switch (cat)
-                {
-                    case "Adventure": <i class="fa-solid fa-mountain"></i> break;
-                    case "Beach": <i class="fa-solid fa-umbrella-beach"></i> break;
-                    case "Culture": <i class="fa-solid fa-landmark"></i> break;
-                    case "Luxury": <i class="fa-solid fa-crown"></i> break;
-                    case "Family": <i class="fa-solid fa-people-group"></i> break;
-                    case "Wellness": <i class="fa-solid fa-spa"></i> break;
-                    default: <i class="fa-solid fa-compass"></i> break;
-                }
-                @cat
+<!-- MakeMyTrip-Inspired Category Switcher & Segmented Smart Search Console -->
+<div class="container mmt-cat-bar-container">
+    <form method="get" id="searchForm">
+        <!-- Elevated Category Switcher Bar (MakeMyTrip Style) -->
+        <div class="mmt-cat-strip">
+            <a href="@Url.Page("/Index")" class="mmt-cat-tab @(string.IsNullOrEmpty(Model.Category) ? "active" : "")">
+                <i class="fa-solid fa-globe"></i>
+                <span>All Trips</span>
             </a>
-        }
+            <a href="@Url.Page("/Index", new { category = "Beach" })" class="mmt-cat-tab @(Model.Category == "Beach" ? "active" : "")">
+                <i class="fa-solid fa-umbrella-beach"></i>
+                <span>Beach & Island</span>
+                <span class="mmt-cat-badge">Hot</span>
+            </a>
+            <a href="@Url.Page("/Index", new { category = "Adventure" })" class="mmt-cat-tab @(Model.Category == "Adventure" ? "active" : "")">
+                <i class="fa-solid fa-mountain-sun"></i>
+                <span>Adventure & Treks</span>
+            </a>
+            <a href="@Url.Page("/Index", new { category = "Culture" })" class="mmt-cat-tab @(Model.Category == "Culture" ? "active" : "")">
+                <i class="fa-solid fa-landmark"></i>
+                <span>Culture & Heritage</span>
+            </a>
+            <a href="@Url.Page("/Index", new { category = "Luxury" })" class="mmt-cat-tab @(Model.Category == "Luxury" ? "active" : "")">
+                <i class="fa-solid fa-crown"></i>
+                <span>Luxury Signature</span>
+            </a>
+            <a href="@Url.Page("/Index", new { category = "Family" })" class="mmt-cat-tab @(Model.Category == "Family" ? "active" : "")">
+                <i class="fa-solid fa-people-roof"></i>
+                <span>Family Tours</span>
+            </a>
+            <a href="@Url.Page("/Index", new { category = "Wellness" })" class="mmt-cat-tab @(Model.Category == "Wellness" ? "active" : "")">
+                <i class="fa-solid fa-spa"></i>
+                <span>Wellness & Spa</span>
+            </a>
+        </div>
+
+        <!-- Segmented Search Console Card -->
+        <div class="mmt-search-card">
+            <div class="mmt-search-grid">
+                <!-- Pod 1: Destination -->
+                <div class="search-pod" id="podDestination">
+                    <label class="pod-label" for="destinationInput">
+                        <i class="fa-solid fa-location-dot"></i> Where To?
+                    </label>
+                    <input type="text" 
+                           id="destinationInput" 
+                           asp-for="Search" 
+                           class="pod-input" 
+                           placeholder="Bali, Swiss Alps, Kyoto..." 
+                           autocomplete="off" />
+                    <div class="pod-subtext">Search by country, city, or tour keyword</div>
+
+                    <!-- Instant Destination Dropdown (MakeMyTrip style auto-suggestions) -->
+                    <div class="pod-dropdown-menu" id="destDropdown">
+                        <div class="pod-dropdown-title">Popular Destinations</div>
+                        @if (Model.AllDestinations.Any())
+                        {
+                            @foreach (var d in Model.AllDestinations.Take(6))
+                            {
+                                <div class="pod-dropdown-item" onclick="selectDestination('@d.Name')">
+                                    <span><i class="fa-solid fa-map-pin me-2 text-warning"></i>@d.Name</span>
+                                    <small>@d.Country</small>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <!-- Pod 2: Category / Trip Theme -->
+                <div class="search-pod">
+                    <label class="pod-label" for="categorySelect">
+                        <i class="fa-solid fa-compass"></i> Trip Theme
+                    </label>
+                    <select id="categorySelect" asp-for="Category" class="pod-select">
+                        <option value="">All Experience Types</option>
+                        @foreach (var cat in Enum.GetNames(typeof(TravelDemo.Models.PackageCategory)))
+                        {
+                            <option value="@cat">@cat Expeditions</option>
+                        }
+                    </select>
+                    <div class="pod-subtext">Small group curated itineraries</div>
+                </div>
+
+                <!-- Pod 3: Departure Window -->
+                <div class="search-pod">
+                    <div class="pod-label">
+                        <i class="fa-regular fa-calendar-check"></i> Departure Window
+                    </div>
+                    <div class="pod-input text-truncate" style="cursor: pointer;" onclick="document.getElementById('searchForm').submit()">
+                        2026 - 2027 Season
+                    </div>
+                    <div class="pod-subtext text-success fw-semibold">
+                        <i class="fa-solid fa-circle-check me-1"></i>Guaranteed seat locks
+                    </div>
+                </div>
+
+                <!-- Pod 4: Max Budget -->
+                <div class="search-pod">
+                    <label class="pod-label" for="budgetInput">
+                        <i class="fa-solid fa-wallet"></i> Max Budget ($)
+                    </label>
+                    <input type="number" 
+                           id="budgetInput" 
+                           asp-for="MaxPrice" 
+                           class="pod-input" 
+                           placeholder="Any Budget" 
+                           step="100" />
+                    <div class="pod-subtext">All taxes & accommodations included</div>
+                </div>
+            </div>
+
+            <!-- Bottom Special Highlights & Quick Budget Filters (MMT Special Fares reference) -->
+            <div class="mmt-bottom-strip">
+                <div class="mmt-highlight-chips">
+                    <span class="highlight-label"><i class="fa-solid fa-tag me-1 text-primary"></i>Quick Budget:</span>
+                    <button type="button" class="chip-tag @(Model.MaxPrice == 1500 ? "active" : "")" onclick="setBudget(1500)">Under $1,500</button>
+                    <button type="button" class="chip-tag @(Model.MaxPrice == 2500 ? "active" : "")" onclick="setBudget(2500)">Under $2,500</button>
+                    <button type="button" class="chip-tag @(Model.MaxPrice == 3500 ? "active" : "")" onclick="setBudget(3500)">Under $3,500</button>
+                    @if (Model.MaxPrice.HasValue || !string.IsNullOrEmpty(Model.Search) || !string.IsNullOrEmpty(Model.Category))
+                    {
+                        <a href="@Url.Page("/Index")" class="chip-tag text-danger border-danger-subtle bg-danger-subtle">
+                            <i class="fa-solid fa-xmark"></i> Reset Filters
+                        </a>
+                    }
+                </div>
+
+                <div class="d-none d-lg-flex align-items-center gap-3 text-secondary small">
+                    <span><i class="fa-solid fa-shield-halved text-success me-1"></i> 100% Verified Stays</span>
+                    <span><i class="fa-solid fa-headset text-primary me-1"></i> 24/7 Concierge</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- High-Impact MakeMyTrip Style Elevated Search Button -->
+        <div class="search-btn-container">
+            <button type="submit" class="btn-mmt-search">
+                <i class="fa-solid fa-magnifying-glass"></i> Search Expeditions
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- MakeMyTrip-Inspired Exclusive Offers & Seasonal Deals Section -->
+<div class="container">
+    <div class="mmt-offers-section">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <span class="text-uppercase text-primary fw-bold small tracking-wide">
+                    <i class="fa-solid fa-gift me-1"></i> Special Member Perks
+                </span>
+                <h3 class="fw-bold mb-0 text-dark">Exclusive Offers & Seasonal Deals</h3>
+            </div>
+            <div class="offers-nav-pills">
+                <button type="button" class="offer-pill active" onclick="filterOffers('all', this)">All Deals</button>
+                <button type="button" class="offer-pill" onclick="filterOffers('earlybird', this)">Early Bird 2026</button>
+                <button type="button" class="offer-pill" onclick="filterOffers('luxury', this)">Luxury Perks</button>
+                <button type="button" class="offer-pill" onclick="filterOffers('flex', this)">Flexible Booking</button>
+            </div>
+        </div>
+
+        <div class="row g-4" id="offersGrid">
+            <!-- Offer 1 -->
+            <div class="col-lg-4 col-md-6 offer-item" data-offer-cat="earlybird">
+                <div class="offer-card">
+                    <div class="offer-img-box">
+                        <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=700&q=80" alt="Bali Offer" />
+                        <span class="offer-card-badge">Limited Time</span>
+                    </div>
+                    <div class="offer-body">
+                        <div class="offer-discount">Save 20% on Island Odysseys</div>
+                        <h4 class="offer-title">Bali & Tropical Getaways</h4>
+                        <p class="offer-desc">Book 60+ days in advance for exclusive villa discounts, floating breakfast, and guided snorkeling tours.</p>
+                        <div class="offer-footer">
+                            <span class="offer-code-badge">
+                                <i class="fa-solid fa-ticket text-warning"></i>
+                                <span id="code1">SUMMER20</span>
+                            </span>
+                            <button type="button" class="btn-copy-code" onclick="copyCode('SUMMER20', this)">
+                                <i class="fa-regular fa-copy me-1"></i> Copy Code
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Offer 2 -->
+            <div class="col-lg-4 col-md-6 offer-item" data-offer-cat="luxury">
+                <div class="offer-card">
+                    <div class="offer-img-box">
+                        <img src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=700&q=80" alt="Swiss Alps Offer" />
+                        <span class="offer-card-badge" style="background: rgba(217, 119, 6, 0.9);">Signature Perk</span>
+                    </div>
+                    <div class="offer-body">
+                        <div class="offer-discount">Complimentary First Class Pass</div>
+                        <h4 class="offer-title">Swiss Glacier Express Upgrade</h4>
+                        <p class="offer-desc">Receive guaranteed 1st-class panoramic train seating and champagne welcome dinner on all Swiss Alps tours.</p>
+                        <div class="offer-footer">
+                            <span class="offer-code-badge">
+                                <i class="fa-solid fa-ticket text-warning"></i>
+                                <span id="code2">ALPSVIP</span>
+                            </span>
+                            <button type="button" class="btn-copy-code" onclick="copyCode('ALPSVIP', this)">
+                                <i class="fa-regular fa-copy me-1"></i> Copy Code
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Offer 3 -->
+            <div class="col-lg-4 col-md-6 offer-item" data-offer-cat="flex">
+                <div class="offer-card">
+                    <div class="offer-img-box">
+                        <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=700&q=80" alt="Kyoto Offer" />
+                        <span class="offer-card-badge" style="background: rgba(16, 185, 129, 0.9);">Zero Stress</span>
+                    </div>
+                    <div class="offer-body">
+                        <div class="offer-discount">100% Flexible Rescheduling</div>
+                        <h4 class="offer-title">Zero Cancellation Assurance</h4>
+                        <p class="offer-desc">Modify or reschedule your departure date without penalties up to 30 days prior. Full travel credit guarantee.</p>
+                        <div class="offer-footer">
+                            <span class="offer-code-badge">
+                                <i class="fa-solid fa-ticket text-warning"></i>
+                                <span id="code3">FLEX2026</span>
+                            </span>
+                            <button type="button" class="btn-copy-code" onclick="copyCode('FLEX2026', this)">
+                                <i class="fa-regular fa-copy me-1"></i> Copy Code
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- Featured Travel Packages Grid -->
+<!-- Handcrafted Travel Packages (MakeMyTrip Clean Card Showcase) -->
 <div class="container my-5">
     <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
         <div>
-            <span class="text-uppercase text-primary fw-bold small tracking-wide">Top Rated Expeditions</span>
-            <h2 class="mb-0 fs-2 fw-bold">Handcrafted Travel Packages</h2>
+            <span class="text-uppercase text-primary fw-bold small tracking-wide">
+                <i class="fa-solid fa-fire me-1"></i> Curated Expeditions
+            </span>
+            <h2 class="mb-0 fs-2 fw-bold text-dark">Handcrafted Travel Packages</h2>
+            <p class="text-secondary mb-0 small">Expertly curated small-group departures with guaranteed departures.</p>
         </div>
-        <a asp-page="/Packages/Index" class="btn btn-wl-outline">
-            View All Packages <i class="fa-solid fa-arrow-right ms-1"></i>
+        <a asp-page="/Packages/Index" class="btn-wl-outline">
+            View All Packages (@Model.TotalPackagesCount) <i class="fa-solid fa-arrow-right ms-1"></i>
         </a>
     </div>
 
     @if (!Model.FeaturedPackages.Any())
     {
-        <div class="alert alert-warning text-center p-5 rounded-4 shadow-sm">
-            <i class="fa-solid fa-circle-exclamation fa-2x mb-3 text-warning"></i>
-            <h4>No travel packages found matching your criteria</h4>
-            <p class="text-secondary">Try clearing your search filter or selecting a different travel category.</p>
-            <a asp-page="/Index" class="btn btn-wl-primary mt-2">Reset All Filters</a>
+        <div class="bg-white border rounded-4 p-5 text-center shadow-sm">
+            <div class="mb-3 text-warning">
+                <i class="fa-solid fa-compass fa-3x"></i>
+            </div>
+            <h3 class="fw-bold text-dark">No travel packages match your search</h3>
+            <p class="text-secondary max-w-md mx-auto">
+                Try widening your price range, clearing your keyword search, or selecting "All Trips" from the top category bar.
+            </p>
+            <a asp-page="/Index" class="btn btn-wl-primary mt-2">
+                <i class="fa-solid fa-rotate-left me-1"></i> Reset All Search Filters
+            </a>
         </div>
     }
     else
@@ -117,59 +310,85 @@
             @foreach (var pkg in Model.FeaturedPackages)
             {
                 var nextDep = pkg.Departures.Where(d => d.StartDate >= DateOnly.FromDateTime(DateTime.Today)).OrderBy(d => d.StartDate).FirstOrDefault();
+                var inclusionsList = !string.IsNullOrEmpty(pkg.Inclusions) 
+                    ? pkg.Inclusions.Split(',').Select(i => i.Trim()).Take(4).ToList() 
+                    : new List<string>();
+
                 <div class="col-lg-4 col-md-6">
                     <div class="package-card">
                         <div class="package-img-wrapper">
                             <img src="@pkg.ImageUrl" alt="@pkg.Title" class="package-img" loading="lazy" />
                             <span class="package-badge-category">@pkg.Category</span>
-                            <span class="package-badge-price">$@pkg.PricePerPerson.ToString("N0")</span>
+                            <span class="package-badge-rating">
+                                <i class="fa-solid fa-star"></i> @pkg.Rating.ToString("0.0")
+                            </span>
                         </div>
+
                         <div class="package-content">
-                            <div class="d-flex align-items-center gap-2 mb-2">
-                                <span class="text-warning small fw-bold">
-                                    <i class="fa-solid fa-star me-1"></i>@pkg.Rating.ToString("0.0")
+                            <div class="package-sub-meta">
+                                <span class="dest-chip">
+                                    <i class="fa-solid fa-location-dot text-primary"></i>
+                                    @pkg.Destination?.Name
                                 </span>
-                                <span class="text-muted small">•</span>
-                                <span class="text-secondary small fw-medium">
-                                    <i class="fa-solid fa-location-dot me-1 text-primary"></i>@pkg.Destination?.Name
+                                <span class="duration-chip">
+                                    <i class="fa-regular fa-clock"></i> @pkg.DurationDays Days
                                 </span>
                             </div>
+
                             <h3 class="package-title">
-                                <a asp-page="/Packages/Details" asp-route-id="@pkg.Id" class="text-decoration-none text-dark">
+                                <a asp-page="/Packages/Details" asp-route-id="@pkg.Id">
                                     @pkg.Title
                                 </a>
                             </h3>
+
                             <p class="package-summary">@pkg.Summary</p>
 
-                            <div class="package-meta">
-                                <div>
-                                    <i class="fa-regular fa-clock me-1"></i> @pkg.DurationDays Days
+                            <!-- Inclusions List (MMT Style) -->
+                            @if (inclusionsList.Any())
+                            {
+                                <div class="package-inclusions-list">
+                                    @foreach (var inc in inclusionsList)
+                                    {
+                                        <span class="inclusion-tag">
+                                            <i class="fa-solid fa-check"></i> @inc
+                                        </span>
+                                    }
                                 </div>
-                                <div>
-                                    <i class="fa-solid fa-users me-1"></i> Max @pkg.MaxGroupSize
-                                </div>
-                                @if (nextDep != null)
-                                {
-                                    <div>
-                                        @if (nextDep.SeatsLeft <= 3 && nextDep.SeatsLeft > 0)
-                                        {
-                                            <span class="seat-badge low">@nextDep.SeatsLeft seats left!</span>
-                                        }
-                                        else if (nextDep.SeatsLeft == 0)
-                                        {
-                                            <span class="seat-badge full">Sold Out</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="seat-badge available">@nextDep.SeatsLeft seats available</span>
-                                        }
-                                    </div>
-                                }
-                            </div>
+                            }
 
-                            <div class="mt-3 pt-3 border-top d-flex gap-2">
-                                <a asp-page="/Packages/Details" asp-route-id="@pkg.Id" class="btn btn-wl-primary w-100 justify-content-center">
-                                    View Details <i class="fa-solid fa-arrow-right ms-1"></i>
+                            <!-- Price & Seat Status Footer -->
+                            <div class="package-price-footer">
+                                <div class="price-details">
+                                    <span class="price-strike">$@((pkg.PricePerPerson * 1.25m).ToString("N0"))</span>
+                                    <div class="d-flex align-items-baseline gap-2">
+                                        <span class="price-main">$@pkg.PricePerPerson.ToString("N0")</span>
+                                        <span class="price-note">/ traveler</span>
+                                    </div>
+                                    @if (nextDep != null)
+                                    {
+                                        <div class="mt-1">
+                                            @if (nextDep.SeatsLeft <= 3 && nextDep.SeatsLeft > 0)
+                                            {
+                                                <span class="seat-badge low">
+                                                    <i class="fa-solid fa-bolt"></i> Only @nextDep.SeatsLeft seats left!
+                                                </span>
+                                            }
+                                            else if (nextDep.SeatsLeft == 0)
+                                            {
+                                                <span class="seat-badge full">Sold Out</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="seat-badge available">
+                                                    <i class="fa-solid fa-circle-check"></i> @nextDep.SeatsLeft seats available
+                                                </span>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+
+                                <a asp-page="/Packages/Details" asp-route-id="@pkg.Id" class="btn-card-action">
+                                    View Details <i class="fa-solid fa-arrow-right"></i>
                                 </a>
                             </div>
                         </div>
@@ -180,13 +399,20 @@
     }
 </div>
 
-<!-- Top Destinations Showcase -->
+<!-- Trending World Destinations (MMT Popular Spots Showcase) -->
 <div class="bg-white py-5 border-top border-bottom my-5">
     <div class="container">
-        <div class="text-center mb-5">
-            <span class="text-uppercase text-primary fw-bold small tracking-wide">Featured Spots</span>
-            <h2 class="fs-2 fw-bold">Popular Destinations</h2>
-            <p class="text-secondary">Discover incredible landscapes, vibrant cultures, and historic landmarks.</p>
+        <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+            <div>
+                <span class="text-uppercase text-primary fw-bold small tracking-wide">
+                    <i class="fa-solid fa-map-location-dot me-1"></i> World Escapes
+                </span>
+                <h2 class="fs-2 fw-bold text-dark mb-0">Trending Destinations</h2>
+                <p class="text-secondary small mb-0">Discover breathtaking landscapes, historic wonders, and coastal paradises.</p>
+            </div>
+            <a asp-page="/Destinations/Index" class="btn-wl-outline">
+                All Destinations <i class="fa-solid fa-arrow-right ms-1"></i>
+            </a>
         </div>
 
         <div class="row g-4">
@@ -198,8 +424,8 @@
                         <div class="dest-overlay">
                             <span class="dest-region">@dest.Country • @dest.Region</span>
                             <h3 class="dest-name">@dest.Name</h3>
-                            <span class="small text-info fw-bold mt-1">
-                                <i class="fa-solid fa-suitcase me-1"></i> @dest.Packages.Count Travel Packages
+                            <span class="dest-pkg-count">
+                                <i class="fa-solid fa-suitcase-rolling text-warning me-1"></i> @dest.Packages.Count Curated Packages
                             </span>
                         </div>
                     </a>
@@ -209,53 +435,126 @@
     </div>
 </div>
 
-<!-- Why Choose Wanderlust Section -->
-<div class="container my-5">
-    <div class="row align-items-center g-5">
-        <div class="col-lg-6">
-            <span class="text-uppercase text-primary fw-bold small tracking-wide">The Wanderlust Advantage</span>
-            <h2 class="fs-2 fw-bold mb-4">Why Modern Travelers Choose Us</h2>
-            <div class="d-flex gap-3 mb-4">
-                <div class="icon-box flex-shrink-0">
-                    <i class="fa-solid fa-shield-halved"></i>
+<!-- Wanderlust Trust & Assurance Pillars (Inspired by MakeMyTrip Assurance) -->
+<div class="container my-5 py-3">
+    <div class="text-center mb-5">
+        <span class="text-uppercase text-primary fw-bold small tracking-wide">
+            <i class="fa-solid fa-shield-check me-1"></i> The Wanderlust Assurance
+        </span>
+        <h2 class="fs-2 fw-bold text-dark">Why Global Travelers Choose Us</h2>
+        <p class="text-secondary max-w-2xl mx-auto">
+            We eliminate travel anxiety with real-time seat locks, audited 4 and 5-star properties, small group limits, and 24/7 dedicated local concierges.
+        </p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="trust-card">
+                <div class="trust-icon-box" style="background: #ffedd5; color: #ff5e14;">
+                    <i class="fa-solid fa-lock"></i>
                 </div>
-                <div>
-                    <h5 class="fw-bold">Concurrency-Safe Seat Reservation</h5>
-                    <p class="text-secondary mb-0">Our ASP.NET Core EF Core backend guarantees real-time seat locks and prevents double-booking issues during peak checkout.</p>
-                </div>
-            </div>
-            <div class="d-flex gap-3 mb-4">
-                <div class="icon-box flex-shrink-0" style="background: #fef3c7; color: #d97706;">
-                    <i class="fa-solid fa-gem"></i>
-                </div>
-                <div>
-                    <h5 class="fw-bold">Bespoke Small Group Privacy</h5>
-                    <p class="text-secondary mb-0">Never travel in overcrowded buses. We cap our group sizes to a max of 12 passengers for intimate, high-end experiences.</p>
-                </div>
-            </div>
-            <div class="d-flex gap-3">
-                <div class="icon-box flex-shrink-0" style="background: #e0e7ff; color: #4338ca;">
-                    <i class="fa-solid fa-headset"></i>
-                </div>
-                <div>
-                    <h5 class="fw-bold">24/7 On-Ground Support</h5>
-                    <p class="text-secondary mb-0">Dedicated trip directors and local expedition guides ensure your safety and comfort at every leg of the journey.</p>
-                </div>
+                <h4 class="trust-title">Concurrency-Safe Seat Locks</h4>
+                <p class="trust-text">
+                    Our real-time ASP.NET Core EF Core backend prevents overbooking and guarantees your departure seat instantly upon reservation.
+                </p>
             </div>
         </div>
-        <div class="col-lg-6">
-            <div class="position-relative">
-                <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1000&q=80" alt="Traveler" class="img-fluid rounded-4 shadow-xl" />
-                <div class="position-absolute bottom-0 start-0 m-4 p-3 bg-white bg-opacity-95 backdrop-blur rounded-3 shadow-lg border">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="text-warning fs-3"><i class="fa-solid fa-award"></i></div>
-                        <div>
-                            <div class="fw-bold text-dark">Award-Winning Platform</div>
-                            <div class="small text-secondary">Best Travel Booking Experience 2026</div>
-                        </div>
-                    </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="trust-card">
+                <div class="trust-icon-box" style="background: #fef3c7; color: #d97706;">
+                    <i class="fa-solid fa-hotel"></i>
                 </div>
+                <h4 class="trust-title">Handpicked 4 & 5-Star Stays</h4>
+                <p class="trust-text">
+                    Every boutique villa, alpine lodge, and heritage resort in our itineraries is personally inspected for top-tier comfort and hygiene.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="trust-card">
+                <div class="trust-icon-box" style="background: #e0e7ff; color: #4338ca;">
+                    <i class="fa-solid fa-people-group"></i>
+                </div>
+                <h4 class="trust-title">Intimate Small Groups</h4>
+                <p class="trust-text">
+                    Never get lost in crowded tour buses. Our journeys are strictly capped at max 12 travelers for genuine local immersion.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="trust-card">
+                <div class="trust-icon-box" style="background: #ecfdf5; color: #059669;">
+                    <i class="fa-solid fa-headset"></i>
+                </div>
+                <h4 class="trust-title">24/7 Dedicated Concierge</h4>
+                <p class="trust-text">
+                    From pre-trip flight adjustments to on-ground private chauffeurs, our certified trip leaders are with you every step of the journey.
+                </p>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+<script>
+    // Toggle dropdown suggestions on Destination input focus
+    const destInput = document.getElementById('destinationInput');
+    const destDropdown = document.getElementById('destDropdown');
+
+    if (destInput && destDropdown) {
+        destInput.addEventListener('focus', () => {
+            destDropdown.classList.add('show');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!destInput.contains(e.target) && !destDropdown.contains(e.target)) {
+                destDropdown.classList.remove('show');
+            }
+        });
+    }
+
+    function selectDestination(name) {
+        if (destInput) {
+            destInput.value = name;
+        }
+        if (destDropdown) {
+            destDropdown.classList.remove('show');
+        }
+    }
+
+    function setBudget(val) {
+        const budgetInput = document.getElementById('budgetInput');
+        if (budgetInput) {
+            budgetInput.value = val;
+            document.getElementById('searchForm').submit();
+        }
+    }
+
+    function filterOffers(cat, btn) {
+        document.querySelectorAll('.offer-pill').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+
+        const items = document.querySelectorAll('.offer-item');
+        items.forEach(item => {
+            if (cat === 'all' || item.getAttribute('data-offer-cat') === cat) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    function copyCode(code, btn) {
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check text-success me-1"></i> Copied!';
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+            }, 2500);
+        });
+    }
+</script>
+}

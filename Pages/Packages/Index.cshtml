@@ -1,78 +1,89 @@
 @page
 @model TravelDemo.Pages.Packages.IndexModel
 @{
-    ViewData["Title"] = "Explore All Travel Packages";
+    ViewData["Title"] = "Explore All Travel Packages - Wanderlust Expeditions";
 }
 
-<!-- Page Header Banner -->
-<div class="bg-dark text-white py-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
-    <div class="container text-center position-relative z-1 py-3">
-        <h1 class="fw-bold fs-1">All Expeditions & Packages</h1>
-        <p class="text-slate-400 max-w-2xl mx-auto">
-            Browse our complete collection of curated itineraries across Asia, Europe, Africa, and the Americas.
+<!-- Page Header Banner with Dark Oceanic Gradient -->
+<div class="py-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(180deg, #070d1e 0%, #0e1935 100%);">
+    <div class="container text-center position-relative z-1 py-3 text-white">
+        <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 rounded-pill px-3 py-1 mb-2">
+            <i class="fa-solid fa-compass me-1"></i> Small-Group Curated Expeditions
+        </span>
+        <h1 class="fw-bold fs-1 text-white">All Expeditions & Packages</h1>
+        <p class="text-slate-300 max-w-2xl mx-auto mb-0">
+            Browse our complete collection of curated itineraries across Asia, Europe, Africa, and the Americas with guaranteed departures.
         </p>
     </div>
 </div>
 
 <div class="container mb-5">
     <div class="row g-4">
-        <!-- Sidebar Filter -->
+        <!-- Sidebar Filter (Responsive for Web & Mobile) -->
         <div class="col-lg-3">
-            <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top" style="top: 90px; z-index: 10;">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="fw-bold mb-0">
-                        <i class="fa-solid fa-sliders text-primary me-2"></i>Filter Trips
-                    </h5>
-                    <a asp-page="/Packages/Index" class="small text-muted text-decoration-none">Reset</a>
+            <!-- Mobile Filter Toggle Button -->
+            <button class="btn btn-outline-dark d-lg-none w-100 mb-3 fw-bold rounded-3 shadow-sm py-2 d-flex align-items-center justify-content-between" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapseBox" aria-expanded="false" aria-controls="filterCollapseBox">
+                <span><i class="fa-solid fa-sliders text-primary me-2"></i>Filter & Sort Trips</span>
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+
+            <div class="collapse d-lg-block" id="filterCollapseBox">
+                <div class="card border border-slate-200 shadow-sm rounded-4 p-4 sticky-top bg-white" style="top: 85px; z-index: 10;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0 text-dark">
+                            <i class="fa-solid fa-sliders text-primary me-2"></i>Filter Trips
+                        </h5>
+                        <a asp-page="/Packages/Index" class="small text-danger text-decoration-none fw-semibold">Reset All</a>
+                    </div>
+                    <form method="get">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-uppercase text-secondary">Search Keyword</label>
+                            <input type="text" asp-for="Search" class="form-control form-control-sm rounded-3" placeholder="e.g. Bali, Glacier, Kyoto..." />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-uppercase text-secondary">Category</label>
+                            <select asp-for="Category" class="form-select form-select-sm rounded-3">
+                                <option value="">All Categories</option>
+                                @foreach (var cat in Enum.GetNames(typeof(TravelDemo.Models.PackageCategory)))
+                                {
+                                    <option value="@cat">@cat</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-uppercase text-secondary">Destination</label>
+                            <select asp-for="DestinationId" class="form-select form-select-sm rounded-3">
+                                <option value="">All Destinations</option>
+                                @foreach (var d in Model.Destinations)
+                                {
+                                    <option value="@d.Id">@d.Name (@d.Country)</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-uppercase text-secondary">Max Budget ($)</label>
+                            <input type="number" asp-for="MaxPrice" class="form-control form-control-sm rounded-3" placeholder="Max price per person" step="100" />
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-uppercase text-secondary">Sort By</label>
+                            <select asp-for="SortBy" class="form-select form-select-sm rounded-3">
+                                <option value="">Featured & Top Rated</option>
+                                <option value="PriceAsc">Price: Low to High</option>
+                                <option value="PriceDesc">Price: High to Low</option>
+                                <option value="Rating">Highest Rating</option>
+                                <option value="Duration">Trip Duration</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-wl-primary w-100 justify-content-center">
+                            <i class="fa-solid fa-filter me-1"></i> Apply Filters
+                        </button>
+                    </form>
                 </div>
-                <form method="get">
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-uppercase text-secondary">Search Keyword</label>
-                        <input type="text" asp-for="Search" class="form-control form-control-sm" placeholder="e.g. Manta, Glacier..." />
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-uppercase text-secondary">Category</label>
-                        <select asp-for="Category" class="form-select form-select-sm">
-                            <option value="">All Categories</option>
-                            @foreach (var cat in Enum.GetNames(typeof(TravelDemo.Models.PackageCategory)))
-                            {
-                                <option value="@cat">@cat</option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-uppercase text-secondary">Destination</label>
-                        <select asp-for="DestinationId" class="form-select form-select-sm">
-                            <option value="">All Destinations</option>
-                            @foreach (var d in Model.Destinations)
-                            {
-                                <option value="@d.Id">@d.Name (@d.Country)</option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-uppercase text-secondary">Max Budget ($)</label>
-                        <input type="number" asp-for="MaxPrice" class="form-control form-control-sm" placeholder="Max price per person" step="100" />
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label small fw-bold text-uppercase text-secondary">Sort By</label>
-                        <select asp-for="SortBy" class="form-select form-select-sm">
-                            <option value="">Featured & Top Rated</option>
-                            <option value="PriceAsc">Price: Low to High</option>
-                            <option value="PriceDesc">Price: High to Low</option>
-                            <option value="Rating">Highest Rating</option>
-                            <option value="Duration">Trip Duration</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn btn-wl-primary w-100 justify-content-center">
-                        <i class="fa-solid fa-filter me-1"></i> Apply Filters
-                    </button>
-                </form>
             </div>
         </div>
 
@@ -80,17 +91,19 @@
         <div class="col-lg-9">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <span class="text-secondary fw-semibold">
-                    Showing <strong>@Model.Packages.Count</strong> package(s)
+                    Showing <strong class="text-dark">@Model.Packages.Count</strong> curated package(s)
                 </span>
             </div>
 
             @if (!Model.Packages.Any())
             {
-                <div class="alert alert-warning text-center p-5 rounded-4 shadow-sm">
-                    <i class="fa-solid fa-face-frown fa-2x mb-3 text-warning"></i>
-                    <h4>No matching packages found</h4>
+                <div class="bg-white border rounded-4 p-5 text-center shadow-sm">
+                    <div class="mb-3 text-warning">
+                        <i class="fa-solid fa-face-frown fa-3x"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark">No matching packages found</h4>
                     <p class="text-secondary">Try relaxing your search terms or price filter.</p>
-                    <a asp-page="/Packages/Index" class="btn btn-wl-primary mt-2">Clear Filters</a>
+                    <a asp-page="/Packages/Index" class="btn btn-wl-primary mt-2">Clear All Filters</a>
                 </div>
             }
             else
@@ -99,72 +112,82 @@
                     @foreach (var pkg in Model.Packages)
                     {
                         var nextDep = pkg.Departures.Where(d => d.StartDate >= DateOnly.FromDateTime(DateTime.Today)).OrderBy(d => d.StartDate).FirstOrDefault();
+                        var inclusionsList = !string.IsNullOrEmpty(pkg.Inclusions) 
+                            ? pkg.Inclusions.Split(',').Select(i => i.Trim()).Take(3).ToList() 
+                            : new List<string>();
+
                         <div class="col-md-6">
                             <div class="package-card">
                                 <div class="package-img-wrapper">
                                     <img src="@pkg.ImageUrl" alt="@pkg.Title" class="package-img" loading="lazy" />
                                     <span class="package-badge-category">@pkg.Category</span>
-                                    <span class="package-badge-price">$@pkg.PricePerPerson.ToString("N0")</span>
+                                    <span class="package-badge-rating">
+                                        <i class="fa-solid fa-star"></i> @pkg.Rating.ToString("0.0")
+                                    </span>
                                 </div>
                                 <div class="package-content">
-                                    <div class="d-flex align-items-center gap-2 mb-2">
-                                        <span class="text-warning small fw-bold">
-                                            <i class="fa-solid fa-star me-1"></i>@pkg.Rating.ToString("0.0")
+                                    <div class="package-sub-meta">
+                                        <span class="dest-chip">
+                                            <i class="fa-solid fa-location-dot text-primary"></i>
+                                            @pkg.Destination?.Name
                                         </span>
-                                        <span class="text-muted small">•</span>
-                                        <span class="text-secondary small fw-medium">
-                                            <i class="fa-solid fa-location-dot me-1 text-primary"></i>@pkg.Destination?.Name
+                                        <span class="duration-chip">
+                                            <i class="fa-regular fa-clock"></i> @pkg.DurationDays Days
                                         </span>
                                     </div>
+
                                     <h3 class="package-title">
-                                        <a asp-page="/Packages/Details" asp-route-id="@pkg.Id" class="text-decoration-none text-dark">
+                                        <a asp-page="/Packages/Details" asp-route-id="@pkg.Id">
                                             @pkg.Title
                                         </a>
                                     </h3>
+
                                     <p class="package-summary">@pkg.Summary</p>
 
-                                    <!-- Inclusions preview badges -->
-                                    @if (!string.IsNullOrEmpty(pkg.Inclusions))
+                                    @if (inclusionsList.Any())
                                     {
-                                        <div class="d-flex flex-wrap gap-1 mb-3">
-                                            @foreach (var inc in pkg.Inclusions.Split(',').Take(3))
+                                        <div class="package-inclusions-list">
+                                            @foreach (var inc in inclusionsList)
                                             {
-                                                <span class="badge bg-light text-secondary border fw-medium px-2 py-1">
-                                                    <i class="fa-solid fa-check text-success me-1"></i>@inc.Trim()
+                                                <span class="inclusion-tag">
+                                                    <i class="fa-solid fa-check"></i> @inc
                                                 </span>
                                             }
                                         </div>
                                     }
 
-                                    <div class="package-meta mt-auto">
-                                        <div>
-                                            <i class="fa-regular fa-clock me-1"></i> @pkg.DurationDays Days
-                                        </div>
-                                        <div>
-                                            <i class="fa-solid fa-users me-1"></i> Max @pkg.MaxGroupSize
-                                        </div>
-                                        @if (nextDep != null)
-                                        {
-                                            <div>
-                                                @if (nextDep.SeatsLeft <= 3 && nextDep.SeatsLeft > 0)
-                                                {
-                                                    <span class="seat-badge low">@nextDep.SeatsLeft seats left!</span>
-                                                }
-                                                else if (nextDep.SeatsLeft == 0)
-                                                {
-                                                    <span class="seat-badge full">Sold Out</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="seat-badge available">@nextDep.SeatsLeft seats</span>
-                                                }
+                                    <div class="package-price-footer">
+                                        <div class="price-details">
+                                            <span class="price-strike">$@((pkg.PricePerPerson * 1.25m).ToString("N0"))</span>
+                                            <div class="d-flex align-items-baseline gap-2">
+                                                <span class="price-main">$@pkg.PricePerPerson.ToString("N0")</span>
+                                                <span class="price-note">/ traveler</span>
                                             </div>
-                                        }
-                                    </div>
+                                            @if (nextDep != null)
+                                            {
+                                                <div class="mt-1">
+                                                    @if (nextDep.SeatsLeft <= 3 && nextDep.SeatsLeft > 0)
+                                                    {
+                                                        <span class="seat-badge low">
+                                                            <i class="fa-solid fa-bolt"></i> @nextDep.SeatsLeft seats left!
+                                                        </span>
+                                                    }
+                                                    else if (nextDep.SeatsLeft == 0)
+                                                    {
+                                                        <span class="seat-badge full">Sold Out</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="seat-badge available">
+                                                            <i class="fa-solid fa-check"></i> @nextDep.SeatsLeft seats
+                                                        </span>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
 
-                                    <div class="mt-3 pt-3 border-top">
-                                        <a asp-page="/Packages/Details" asp-route-id="@pkg.Id" class="btn btn-wl-primary w-100 justify-content-center">
-                                            Explore Package <i class="fa-solid fa-arrow-right ms-1"></i>
+                                        <a asp-page="/Packages/Details" asp-route-id="@pkg.Id" class="btn-card-action">
+                                            Details <i class="fa-solid fa-arrow-right"></i>
                                         </a>
                                     </div>
                                 </div>

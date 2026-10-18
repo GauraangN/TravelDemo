@@ -16,7 +16,9 @@ public class IndexModel : PageModel
     }
 
     public List<Destination> Destinations { get; set; } = new();
+    public List<Destination> AllDestinations { get; set; } = new();
     public List<TravelPackage> FeaturedPackages { get; set; } = new();
+    public int TotalPackagesCount { get; set; }
 
     [BindProperty(SupportsGet = true)]
     public string? Category { get; set; }
@@ -29,10 +31,16 @@ public class IndexModel : PageModel
 
     public async Task OnGetAsync()
     {
+        AllDestinations = await _context.Destinations
+            .OrderBy(d => d.Name)
+            .ToListAsync();
+
         Destinations = await _context.Destinations
             .Include(d => d.Packages)
             .Take(6)
             .ToListAsync();
+
+        TotalPackagesCount = await _context.Packages.CountAsync();
 
         var query = _context.Packages
             .Include(p => p.Destination)

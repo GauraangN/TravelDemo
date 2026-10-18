@@ -1,35 +1,39 @@
 @page
 @model TravelDemo.Pages.Destinations.IndexModel
 @{
-    ViewData["Title"] = "World Destinations";
+    ViewData["Title"] = "World Destinations - Wanderlust Expeditions";
 }
 
-<div class="bg-dark text-white py-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
-    <div class="container text-center position-relative z-1 py-3">
-        <h1 class="fw-bold fs-1">Explore Global Destinations</h1>
-        <p class="text-slate-400 max-w-2xl mx-auto">
-            From tropical Southeast Asian beaches to snow-draped European mountain summits and African savannahs.
+<!-- Page Header Banner with Dark Oceanic Gradient -->
+<div class="py-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(180deg, #070d1e 0%, #0e1935 100%);">
+    <div class="container text-center position-relative z-1 py-3 text-white">
+        <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 rounded-pill px-3 py-1 mb-2">
+            <i class="fa-solid fa-map-location-dot me-1"></i> Global Discovery
+        </span>
+        <h1 class="fw-bold fs-1 text-white">Explore World Destinations</h1>
+        <p class="text-slate-300 max-w-2xl mx-auto mb-0">
+            From tropical Southeast Asian beaches to snow-draped European mountain summits, Aegean coastal coves, and African savannahs.
         </p>
     </div>
 </div>
 
 <div class="container mb-5">
-    <!-- Region Selector Pills -->
+    <!-- Region Selector Pills (Clean MMT Style) -->
     <div class="d-flex justify-content-center gap-2 flex-wrap mb-5">
-        <a asp-page="/Destinations/Index" class="category-pill @(string.IsNullOrEmpty(Model.Region) ? "active" : "")">
-            All Regions
+        <a asp-page="/Destinations/Index" class="chip-tag px-3 py-2 fs-6 @(string.IsNullOrEmpty(Model.Region) ? "active" : "")">
+            <i class="fa-solid fa-globe me-1"></i> All Regions
         </a>
-        <a asp-page="/Destinations/Index" asp-route-region="Asia" class="category-pill @(Model.Region == "Asia" ? "active" : "")">
-            Asia
+        <a asp-page="/Destinations/Index" asp-route-region="Asia" class="chip-tag px-3 py-2 fs-6 @(Model.Region == "Asia" ? "active" : "")">
+            <i class="fa-solid fa-earth-asia me-1"></i> Asia
         </a>
-        <a asp-page="/Destinations/Index" asp-route-region="Europe" class="category-pill @(Model.Region == "Europe" ? "active" : "")">
-            Europe
+        <a asp-page="/Destinations/Index" asp-route-region="Europe" class="chip-tag px-3 py-2 fs-6 @(Model.Region == "Europe" ? "active" : "")">
+            <i class="fa-solid fa-earth-europe me-1"></i> Europe
         </a>
-        <a asp-page="/Destinations/Index" asp-route-region="Africa" class="category-pill @(Model.Region == "Africa" ? "active" : "")">
-            Africa
+        <a asp-page="/Destinations/Index" asp-route-region="Africa" class="chip-tag px-3 py-2 fs-6 @(Model.Region == "Africa" ? "active" : "")">
+            <i class="fa-solid fa-earth-africa me-1"></i> Africa
         </a>
-        <a asp-page="/Destinations/Index" asp-route-region="Americas" class="category-pill @(Model.Region == "Americas" ? "active" : "")">
-            Americas
+        <a asp-page="/Destinations/Index" asp-route-region="Americas" class="chip-tag px-3 py-2 fs-6 @(Model.Region == "Americas" ? "active" : "")">
+            <i class="fa-solid fa-earth-americas me-1"></i> Americas
         </a>
     </div>
 
@@ -43,8 +47,8 @@
                         <span class="dest-region">@dest.Country • @dest.Region</span>
                         <h3 class="dest-name">@dest.Name</h3>
                         <p class="small text-slate-300 mb-2 line-clamp-2">@dest.Description</p>
-                        <span class="small text-info fw-bold">
-                            <i class="fa-solid fa-suitcase me-1"></i> @dest.Packages.Count Travel Packages
+                        <span class="dest-pkg-count">
+                            <i class="fa-solid fa-suitcase-rolling text-warning me-1"></i> @dest.Packages.Count Curated Travel Packages
                         </span>
                     </div>
                 </a>
